@@ -1,53 +1,57 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
+import { isNumber } from '../utils/checkType'
 import { Keyboard, Pressable, Animated, Dimensions, Easing, KeyboardAvoidingView, StatusBar, View, ActivityIndicator, Modal } from 'react-native'
 import styles from '../assets/styles/action-sheet.styles'
 
-const SHOW = 'show'
-const HIDE = 'hide'
-const screenHeight = Dimensions.get('window').height
+const SCREEN_HEIGHT = Dimensions.get('window').height
+const ACTIONSHEET_MAX_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight - 100
 
-const ActionSheet = ({ isOpen, onClose, children }) => {
-    const ACTIONSHEET_MAX_HEIGHT = screenHeight - StatusBar.currentHeight - 100
+const ActionSheet = ({ isOpen, onClose, animateDuration, children }) => {
+    if(!isNumber(animateDuration)) animateDuration = 300
+    
     const [actionSheetMaxHeight, setActionSheetMaxHeight] = useState(ACTIONSHEET_MAX_HEIGHT)
     const [visible, setVisible] = useState(false)
     const actionSheetHeight = useRef(null)
-    const moveValue = useRef(screenHeight)
-    const move = useRef(new Animated.Value(screenHeight)).current
-    const [allowRender, setAllowRender] = useState(false)
-    const [actionSheetState, setActionSheetState] = useState(HIDE)
+    const moveValue = useRef(SCREEN_HEIGHT)
+    const move = useRef(new Animated.Value(SCREEN_HEIGHT)).current
 
-    const onOpened = ({ finished }) => {
-        if(finished) {
-            setAllowRender(true)
-        }
-    }
-
-    const onClosed = ({ finished }) => {
+    const onClosed = useCallback(({ finished }) => {
         if(finished) {
             setVisible(false)
             Keyboard.dismiss()
         }
-    }
+    }, [])
 
-    const close = () => {
+    const close = useCallback(() => {
         Animated.timing(move, {
-            toValue: screenHeight,
-            duration: 200,
+            toValue: SCREEN_HEIGHT,
+            duration: animateDuration,
             easing: Easing.ease,
             useNativeDriver: true
         }).start(onClosed)
-    }
+    }, [])
 
-    const handleResponderMove = e => {
-        const offsetBottom = screenHeight - e.nativeEvent.pageY
+    const release = useCallback(() => {
+        Animated.timing(move, {
+            toValue: 0,
+            duration: animateDuration,
+            easing: Easing.ease,
+            useNativeDriver: true
+        }).start()
+    }, [])
+
+    const handleResponderMove = useCallback(e => {
+        const offsetBottom = SCREEN_HEIGHT - e.nativeEvent.pageY
         if(offsetBottom < actionSheetHeight.current) move.setValue(actionSheetHeight.current - offsetBottom)
-    }
+    }, [])
 
-    const handleModalShow = () => setActionSheetState(SHOW)
-
-    const handleEndResponderMove = () => {
-        moveValue.current >= actionSheetHeight.current * 0.15 && onClose()
-    }
+    const handleEndResponderMove = useCallback(() => {
+        if(moveValue.current >= actionSheetHeight.current * 0.15) {
+            onClose()
+        } else {
+            release()
+        }
+    }, [])
 
     useEffect(() => {
         const moveSubscription = move.addListener(({ value }) => moveValue.current = value)
@@ -72,21 +76,6 @@ const ActionSheet = ({ isOpen, onClose, children }) => {
         }
     }, [])
 
-    useEffect(() => {
-        if(actionSheetState === SHOW) {
-            Animated.timing(move, {
-                toValue: 0,
-                duration: 300,
-                easing: Easing.ease,
-                useNativeDriver: true
-            }).start(onOpened)
-        }
-    }, [actionSheetState])
-
-    useEffect(() => {
-        visible || setActionSheetState(HIDE)
-    }, [visible])
-
     useEffect(() =>{
         isOpen ? setVisible(true) : close()
     }, [isOpen])
@@ -96,12 +85,12 @@ const ActionSheet = ({ isOpen, onClose, children }) => {
             transparent={true}
             visible={visible}
             animationType='fade'
-            onShow={handleModalShow}
-            onRequestClose={() => console.log('back press')}
+            onShow={release}
+            // onRequestClose={() => console.log('back press')}
         >
             <KeyboardAvoidingView
                 behavior='height'
-                style={[styles[actionSheetState], styles.container]}
+                style={styles.container}
             >
                 <Pressable
                     style={styles.overlay}
@@ -125,13 +114,7 @@ const ActionSheet = ({ isOpen, onClose, children }) => {
                     >
                         <View style={styles.controlItem} />
                     </View>
-                    {allowRender ? children : (
-                        <ActivityIndicator
-                            size='large'
-                            style={{ marginTop: 20 }}
-                            color='#779ECD'
-                        />
-                    )}
+                    {children}
                 </Animated.View>
             </KeyboardAvoidingView>
         </Modal>

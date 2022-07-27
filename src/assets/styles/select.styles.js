@@ -18,6 +18,12 @@ const styles = StyleSheet.create({
         flex: 1,
         color: 'gray'
     },
+    option: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 10
+    },
     arrow: {
         marginRight: 10
     }

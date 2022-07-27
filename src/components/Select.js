@@ -1,19 +1,32 @@
-import React, { useState } from 'react'
-import { Pressable, TextInput, Text, View } from 'react-native'
+import React, { useState, useContext } from 'react'
+import { Pressable, TextInput, Text, TouchableHighlight } from 'react-native'
+import { SelectContext } from './Context'
+import { isFunction } from '../utils/checkType'
 import ActionSheet from './ActionSheet'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import styles from '../assets/styles/select.styles'
 
-const Item = ({ value, children }) => {
+const Option = ({ value, label }) => {
+	const { setSelectedOption } = useContext(SelectContext)
+	
+	const handlePress = () => setSelectedOption({ value, label }) 
+
 	return (
-		<Pressable>
-			<Text>{children}</Text>
-		</Pressable>
+		<TouchableHighlight
+			style={styles.option}
+			underlayColor="#DDDDDD"
+			onPress={handlePress}
+		>
+			{label && (
+				<Text>{label}</Text>
+			)}
+		</TouchableHighlight>
 	)
 }
 
-const Select = ({ children }) => {
+const Select = ({ placeholder, onchange, animateDuration, children }) => {
 	const [isOpen, setIsOpen] = useState(false)
+	const [selectedLabel, setSelectedLabel] = useState(null)
 	
 	const handleCloseActionSheet = () => {
 		setIsOpen(false)
@@ -23,17 +36,23 @@ const Select = ({ children }) => {
 		setIsOpen(true)
 	}
 
+	const setSelectedOption = ({ value, label }) => {
+		setSelectedLabel(label)
+		isFunction(onchange) && onchange(value)
+		handleCloseActionSheet()
+	}
+
 	return (
-		<>
+		<SelectContext.Provider value={{ setSelectedOption }}>
 			<Pressable
 				style={styles.container}
 				onPress={handleOpenActionSheet}
 			>
 				<TextInput
 					style={styles.select}
-					placeholder='select'
+					placeholder={placeholder}
 					editable={false}
-					value='hello'
+					value={selectedLabel}
 				/>
 				<Icon
 					style={styles.arrow}
@@ -44,11 +63,14 @@ const Select = ({ children }) => {
 			<ActionSheet
 				isOpen={isOpen}
 				onClose={handleCloseActionSheet}
+				animateDuration={animateDuration}
 			>
-				{/* {children} */}
+				{children}
 			</ActionSheet>
-		</>
+		</SelectContext.Provider>
 	)
 }
+
+Select.Option = Option
 
 export default Select

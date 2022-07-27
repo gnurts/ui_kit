@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 
-const ContainerStackContext = createContext({})
+const SelectContext = createContext({})
 
 export {
-    ContainerStackContext
+    SelectContext
 }

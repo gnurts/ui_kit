@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useRef, useEffect, memo } from 'react'
+import React, { useState, forwardRef, useRef, useEffect, memo, useCallback, useMemo } from 'react'
 import { View, TextInput, Pressable } from 'react-native'
 import styles from '../assets/styles/input.styles'
 import { isFunction, isObject } from '../utils/checkType'
@@ -22,27 +22,23 @@ const Clear = ({ value, onClear }) => {
 
 const LeftAddon = memo(({ leftAddon, onPress }) => {
     return (
-        <>{leftAddon && (
-            <Pressable
-                style={styles.left}
-                onPress={onPress}
-            >
-                {leftAddon}
-            </Pressable>
-        )}</>
+        <Pressable
+            style={styles.left}
+            onPress={onPress}
+        >
+            {leftAddon}
+        </Pressable>
     )
 })
 
 const RightAddon = memo(({ rightAddon, onPress }) => {
     return (
-        <>{rightAddon && (
-            <Pressable
-                style={styles.right}
-                onPress={onPress}
-            >
-                {rightAddon}
-            </Pressable>
-        )}</>
+        <Pressable
+            style={styles.right}
+            onPress={onPress}
+        >
+            {rightAddon}
+        </Pressable>
     )
 })
 
@@ -50,7 +46,7 @@ const Input = ({ placeholder, value, onFocus, onBlur, onChangeText, leftAddon, r
     const inputRef = useRef(null)
     const [inputState, setInputState] = useState(BLUR)
 
-    const focus = () => inputRef.current.focus()
+    const focus = useCallback(() => inputRef.current.focus(), [])
 
     const blur = () => inputRef.current.blur()
 
@@ -79,19 +75,17 @@ const Input = ({ placeholder, value, onFocus, onBlur, onChangeText, leftAddon, r
         }
     }, [])
 
-    useEffect(() => {
-        console.log(styles.input)
-    }, [])
-
     return (
         <View
             style={styles[inputState]}
             accessible={true}
         >
-            <LeftAddon
-                leftAddon={leftAddon}
-                onPress={focus}
-            />
+            {leftAddon && (
+                <LeftAddon
+                    leftAddon={leftAddon}
+                    onPress={focus}
+                />
+            )}
             <TextInput
                 style={styles.input}
                 ref={inputRef}
@@ -107,10 +101,12 @@ const Input = ({ placeholder, value, onFocus, onBlur, onChangeText, leftAddon, r
                 value={value}
                 onClear={handleClear}
             />
-            <RightAddon
-                rightAddon={rightAddon}
-                onPress={focus}
-            />
+            {rightAddon && (
+                <RightAddon
+                    rightAddon={rightAddon}
+                    onPress={focus}
+                />
+            )}
         </View>
     )
 }

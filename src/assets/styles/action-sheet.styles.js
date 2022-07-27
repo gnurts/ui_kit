@@ -7,12 +7,6 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%'
     },
-    show: {
-        display: 'flex'
-    },
-    hide: {
-        display: 'none'
-    },
     overlay: {
         position: 'absolute',
         top: 0,
@@ -35,7 +29,7 @@ const styles = StyleSheet.create({
         height: 25,
         backgroundColor: '#F6F6F6',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     controlItem: {
         width: 30,
