@@ -1,10 +1,11 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { Button, Pressable, Text, View, ScrollView, Modal } from 'react-native'
-import { TouchableOpacity, GestureHandlerRootView, NativeViewGestureHandler, BaseButton } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Input from './src/components/Input'
 import Select from './src/components/Select'
 import ActionSheet from './src/components/ActionSheet'
+import { Row, Col } from './src/components/Layout'
+import useAutoForus from './src/custom-hook/useAutoFocus'
 
 const Addon = <Icon name='user' size={20} />
 
@@ -79,26 +80,18 @@ const ActionSheetContent = () => {
 
 const App = () => {
     const [openActionSheet, setOpenActionSheet] = useState(false)
+	const [testValue, setTestValue] = useState(null)
+	const refs = [useRef(), useRef(), useRef(), useRef(), useRef()]
+	const { nextFocus, changeFocus } = useAutoForus({
+		refs,
+		order: [0, 1, 2, 3, 4],
+		start: 0
+	})
+	
 
-	// return (
-	// 	<>
-	// 		<Button
-	// 			title='open'
-	// 			onPress={() => setOpenActionSheet(true)}
-	// 		/>
-	// 		<Modal
-	// 			visible={openActionSheet}
-	// 			animationType='slide'
-	// 		>
-	// 			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-	// 				<Button
-	// 					title='close'
-	// 					onPress={() => setOpenActionSheet(false)}
-	// 				/>
-	// 			</View>
-	// 		</Modal>
-	// 	</>
-	// )
+	useEffect(() => {
+		console.log(openActionSheet)
+	}, [openActionSheet])
 
     return (
 		<View
@@ -132,6 +125,73 @@ const App = () => {
 					}}
 				/>
 			</View>
+			<Row gutter={[10, 10]}>
+				<Col span={50}>
+					<View style={{
+						width: '100%',
+						height: 100,
+						backgroundColor: 'red'
+					}}>
+					</View>
+				</Col>
+				<Col span={50}>
+					<View style={{
+						width: '100%',
+						height: 100,
+						backgroundColor: 'blue'
+					}}></View>
+				</Col>
+			</Row>
+			<Input
+				ref={refs[0]}
+				onPressIn={() => changeFocus(0)}
+				onSubmitEditing={nextFocus}
+				showSoftInputOnFocus={false}
+				placeholder='ex: 192.168.0.1:8000'
+				value={testValue}
+				onChangeText={setTestValue}
+				leftAddon={<Text style={{ borderRightWidth: 1, borderColor: 'gray', paddingRight: 10, width: 60 }}>API</Text>}
+			/>
+			<Input
+				ref={refs[1]}
+				onPressIn={() => changeFocus(1)}
+				onSubmitEditing={nextFocus}
+				showSoftInputOnFocus={false}
+				placeholder='test in put'
+				value={testValue}
+				onChangeText={setTestValue}
+				leftAddon={<Text style={{ borderRightWidth: 1, borderColor: 'gray', paddingRight: 10, width: 60 }}>Socket</Text>}
+			/>
+			<Input
+				ref={refs[2]}
+				onPressIn={() => changeFocus(2)}
+				onSubmitEditing={nextFocus}
+				showSoftInputOnFocus={false}
+				placeholder='test in put'
+				value={testValue}
+				onChangeText={setTestValue}
+				leftAddon={Addon}
+			/>
+			<Input
+				ref={refs[3]}
+				onPressIn={() => changeFocus(3)}
+				onSubmitEditing={nextFocus}
+				showSoftInputOnFocus={false}
+				placeholder='test in put'
+				value={testValue}
+				onChangeText={setTestValue}
+				leftAddon={Addon}
+			/>
+			<Input
+				ref={refs[4]}
+				onPressIn={() => changeFocus(4)}
+				onSubmitEditing={nextFocus}
+				showSoftInputOnFocus={false}
+				placeholder='test in put'
+				value={testValue}
+				onChangeText={setTestValue}
+				leftAddon={Addon}
+			/>
 		</View>
     )
 }

@@ -42,11 +42,11 @@ const RightAddon = memo(({ rightAddon, onPress }) => {
     )
 })
 
-const Input = ({ placeholder, value, onFocus, onBlur, onChangeText, leftAddon, rightAddon, showSoftInputOnFocus, onSubmitEditing }, ref) => {
+const Input = ({ placeholder, value, onFocus, onBlur, onPressIn, onChangeText, leftAddon, rightAddon, showSoftInputOnFocus, onSubmitEditing }, ref) => {
     const inputRef = useRef(null)
     const [inputState, setInputState] = useState(BLUR)
 
-    const focus = useCallback(() => inputRef.current.focus(), [])
+    const focus = () => inputRef.current.focus()
 
     const blur = () => inputRef.current.blur()
 
@@ -64,9 +64,15 @@ const Input = ({ placeholder, value, onFocus, onBlur, onChangeText, leftAddon, r
         isFunction(onChangeText) && onChangeText(text)
     }
 
+    const handlePressIn = useCallback(() => {
+        focus()
+        isFunction(onPressIn) && onPressIn()
+    }, [])
+
     const handleClear = () => {
-        inputRef.current.focus()
+        focus()
         handleChangeText(null)
+        isFunction(onPressIn) && onPressIn()
     }
 
     useEffect(() => {
@@ -83,7 +89,7 @@ const Input = ({ placeholder, value, onFocus, onBlur, onChangeText, leftAddon, r
             {leftAddon && (
                 <LeftAddon
                     leftAddon={leftAddon}
-                    onPress={focus}
+                    onPress={handlePressIn}
                 />
             )}
             <TextInput
@@ -96,6 +102,7 @@ const Input = ({ placeholder, value, onFocus, onBlur, onChangeText, leftAddon, r
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 onChangeText={handleChangeText}
+                onPressIn={handlePressIn}
             />
             <Clear
                 value={value}
@@ -104,7 +111,7 @@ const Input = ({ placeholder, value, onFocus, onBlur, onChangeText, leftAddon, r
             {rightAddon && (
                 <RightAddon
                     rightAddon={rightAddon}
-                    onPress={focus}
+                    onPress={handlePressIn}
                 />
             )}
         </View>
