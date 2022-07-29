@@ -1,9 +1,9 @@
-import React, { useContext, useRef } from 'react'
+import React, { useRef } from 'react'
 import uuid from 'react-native-uuid'
 import { View } from 'react-native'
-import { isArray, isNumber } from '../utils/checkType'
-import { LayoutContext } from './Context'
-import styles from '../assets/styles/layout.styles'
+import { isArray, isNumber } from '../../utils/checkType'
+import { LayoutContext } from '../Context'
+import styles from '../../assets/styles/layout.styles'
 
 const Row = ({ children, gutter }) => {
     const gutterX = useRef(0)
@@ -26,8 +26,8 @@ const Row = ({ children, gutter }) => {
             <View
                 key={uuid.v4()}
                 style={{
-                    marginVertical: gutterY.current,
-                    marginHorizontal: gutterX.current
+                    paddingVertical: gutterY.current,
+                    paddingHorizontal: gutterX.current,
                 }}
             >
                 {child}
@@ -56,23 +56,4 @@ const Row = ({ children, gutter }) => {
     )
 }
 
-const Col = ({ children, span }) => {
-    const { gutterX, gutterY } = useContext(LayoutContext)
-    
-    return (
-        <View
-            style={{
-                width : isNumber(span) ? `${span}%` : 0,
-                paddingVertical: gutterY,
-                paddingHorizontal: gutterX
-            }}
-        >
-            {children}
-        </View>
-    )
-}
-
-export {
-    Row,
-    Col
-}
+export default Row

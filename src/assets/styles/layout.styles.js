@@ -5,6 +5,15 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap'
+    },
+    center: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    container: {
+        display: 'flex',
+        flex: 1
     }
 })
 

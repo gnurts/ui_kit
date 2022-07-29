@@ -4,7 +4,10 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import Input from './src/components/Input'
 import Select from './src/components/Select'
 import ActionSheet from './src/components/ActionSheet'
-import { Row, Col } from './src/components/Layout'
+import Row from './src/components/layout/Row'
+import Col from './src/components/layout/Col'
+import Center from './src/components/layout/Center'
+import Container from './src/components/layout/Container'
 import useAutoForus from './src/custom-hook/useAutoFocus'
 
 const Addon = <Icon name='user' size={20} />
@@ -94,11 +97,7 @@ const App = () => {
 	}, [openActionSheet])
 
     return (
-		<View
-			style={{
-				flex: 1
-			}}
-		>
+		<Container>
 			<ActionSheet
 				isOpen={openActionSheet}
 				onClose={() => setOpenActionSheet(false)}
@@ -125,7 +124,7 @@ const App = () => {
 					}}
 				/>
 			</View>
-			<Row gutter={[10, 10]}>
+			<Row gutter={[12, 12]}>
 				<Col span={50}>
 					<View style={{
 						width: '100%',
@@ -192,7 +191,7 @@ const App = () => {
 				onChangeText={setTestValue}
 				leftAddon={Addon}
 			/>
-		</View>
+		</Container>
     )
 }
 
