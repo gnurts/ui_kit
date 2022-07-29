@@ -6,7 +6,6 @@ const blur = {
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'gray',
-    margin: 10,
     borderRadius: 3
 }
 
