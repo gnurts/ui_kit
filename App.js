@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
-import { Button, Pressable, Text, View, ScrollView, Modal } from 'react-native'
+import { Button, Pressable, View, ScrollView, Modal } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Input from './src/components/Input'
 import Select from './src/components/Select'
@@ -7,76 +7,99 @@ import ActionSheet from './src/components/ActionSheet'
 import Row from './src/components/layout/Row'
 import Col from './src/components/layout/Col'
 import Center from './src/components/layout/Center'
+import Text from './src/components/Text'
 import Container from './src/components/layout/Container'
 import useAutoForus from './src/custom-hook/useAutoFocus'
 
-const Addon = <Icon name='user' size={20} />
+const Addon = <Icon name='user' size={20} color='gray' />
 
 const ActionSheetContent = () => {
 	const [testValue, setTestValue] = useState(null)
 	
 	return (
 		<ScrollView keyboardShouldPersistTaps='always'>
-			<Input
-				placeholder='ex: 192.168.0.1:8000'
-				value={testValue}
-				onChangeText={setTestValue}
-				leftAddon={<Text style={{ borderRightWidth: 1, borderColor: 'gray', paddingRight: 10, width: 60 }}>API</Text>}
-			/>
-			<Input
-				placeholder='test in put'
-				value={testValue}
-				onChangeText={setTestValue}
-				leftAddon={<Text style={{ borderRightWidth: 1, borderColor: 'gray', paddingRight: 10, width: 60 }}>Socket</Text>}
-			/>
-			<Input
-				placeholder='test in put'
-				value={testValue}
-				onChangeText={setTestValue}
-				leftAddon={Addon}
-			/>
-			<Input
-				placeholder='test in put'
-				value={testValue}
-				onChangeText={setTestValue}
-				leftAddon={Addon}
-			/>
-			<Input
-				placeholder='test in put'
-				value={testValue}
-				onChangeText={setTestValue}
-				leftAddon={Addon}
-			/>
-			<Input
-				placeholder='test in put'
-				value={testValue}
-				onChangeText={setTestValue}
-				leftAddon={Addon}
-			/>
-			<Input
-				placeholder='test in put'
-				value={testValue}
-				onChangeText={setTestValue}
-				leftAddon={Addon}
-			/>
-			<Input
-				placeholder='test in put'
-				value={testValue}
-				onChangeText={setTestValue}
-				leftAddon={Addon}
-			/>
-			<Input
-				placeholder='test in put'
-				value={testValue}
-				onChangeText={setTestValue}
-				leftAddon={Addon}
-			/>
-			<Input
-				placeholder='test in put'
-				value={testValue}
-				onChangeText={setTestValue}
-				leftAddon={Addon}
-			/>
+			<Row gutter={10}>
+				<Col span={100}>
+					<Input
+						placeholder='ex: 192.168.0.1:8000'
+						value={testValue}
+						onChangeText={setTestValue}
+						leftAddon={<Text style={{ borderRightWidth: 1, borderColor: 'gray', paddingRight: 10, width: 60, color: 'gray' }}>API</Text>}
+					/>
+				</Col>
+				<Col span={100}>
+					<Input
+						placeholder='test in put'
+						value={testValue}
+						onChangeText={setTestValue}
+						leftAddon={<Text style={{ borderRightWidth: 1, borderColor: 'gray', paddingRight: 10, width: 60, color: 'gray' }}>Socket</Text>}
+					/>
+				</Col>
+				<Col span={100}>
+					<Input
+						placeholder='test in put'
+						value={testValue}
+						onChangeText={setTestValue}
+						leftAddon={Addon}
+					/>
+				</Col>
+				<Col span={100}>
+					<Input
+						placeholder='test in put'
+						value={testValue}
+						onChangeText={setTestValue}
+						leftAddon={Addon}
+					/>
+				</Col>
+				<Col span={100}>
+					<Input
+						placeholder='test in put'
+						value={testValue}
+						onChangeText={setTestValue}
+						leftAddon={Addon}
+					/>
+				</Col>
+				<Col span={100}>
+					<Input
+						placeholder='test in put'
+						value={testValue}
+						onChangeText={setTestValue}
+						leftAddon={Addon}
+					/>
+				</Col>
+				<Col span={100}>
+					<Input
+						placeholder='test in put'
+						value={testValue}
+						onChangeText={setTestValue}
+						leftAddon={Addon}
+					/>
+				</Col>
+				<Col span={100}>
+					<Input
+						placeholder='test in put'
+						value={testValue}
+						onChangeText={setTestValue}
+						leftAddon={Addon}
+					/>
+				</Col>
+				<Col span={100}>
+					<Input
+						placeholder='test in put'
+						value={testValue}
+						onChangeText={setTestValue}
+						leftAddon={Addon}
+					/>
+				</Col>
+				<Col span={100}>
+					<Input
+						placeholder='test in put'
+						value={testValue}
+						onChangeText={setTestValue}
+						leftAddon={Addon}
+					/>
+				</Col>
+			</Row>
 		</ScrollView>
 	)
 }
@@ -149,7 +172,7 @@ const App = () => {
 				placeholder='ex: 192.168.0.1:8000'
 				value={testValue}
 				onChangeText={setTestValue}
-				leftAddon={<Text style={{ borderRightWidth: 1, borderColor: 'gray', paddingRight: 10, width: 60 }}>API</Text>}
+				leftAddon={<Text style={{ borderRightWidth: 1, borderColor: 'gray', paddingRight: 10, width: 60, color: 'gray' }}>API</Text>}
 			/>
 			<Input
 				ref={refs[1]}
@@ -159,7 +182,7 @@ const App = () => {
 				placeholder='test in put'
 				value={testValue}
 				onChangeText={setTestValue}
-				leftAddon={<Text style={{ borderRightWidth: 1, borderColor: 'gray', paddingRight: 10, width: 60 }}>Socket</Text>}
+				leftAddon={<Text style={{ borderRightWidth: 1, borderColor: 'gray', paddingRight: 10, width: 60, color: 'gray' }}>Socket</Text>}
 			/>
 			<Input
 				ref={refs[2]}

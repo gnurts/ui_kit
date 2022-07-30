@@ -76,6 +76,10 @@ const ActionSheet = ({ isOpen, onClose, animateDuration, children }) => {
         }
     }, [])
 
+    useEffect(() => {
+        console.log(`visible: ${visible}`)
+    }, [visible])
+
     useEffect(() =>{
         isOpen ? setVisible(true) : close()
     }, [isOpen])

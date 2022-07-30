@@ -15,6 +15,7 @@ const Clear = ({ value, onClear }) => {
                 onPress={onClear}
                 name='close'
                 size={20}
+                color={styles.placeholderTextColor}
             />
         )}</>
     )
@@ -96,6 +97,7 @@ const Input = ({ placeholder, value, onFocus, onBlur, onPressIn, onChangeText, l
                 style={styles.input}
                 ref={inputRef}
                 placeholder={placeholder}
+                placeholderTextColor={styles.placeholderTextColor}
                 value={value}
                 showSoftInputOnFocus={showSoftInputOnFocus}
                 onSubmitEditing={onSubmitEditing}
