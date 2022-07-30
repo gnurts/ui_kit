@@ -3,6 +3,7 @@ import { Button, Pressable, View, ScrollView, Modal } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Input from './src/components/Input'
 import Select from './src/components/Select'
+import Radio from './src/components/Radio'
 import ActionSheet from './src/components/ActionSheet'
 import Row from './src/components/layout/Row'
 import Col from './src/components/layout/Col'
@@ -138,6 +139,14 @@ const App = () => {
 						<Select.Option value={3} label='test3' />
 						<Select.Option value={4} label='test4' />
 					</Select>
+				</Col>
+				<Col span={100}>
+					<Radio>
+						<Radio.Option value={1} label='test1' />
+						<Radio.Option value={2} label='test2' />
+						<Radio.Option value={3} label='test3' />
+						<Radio.Option value={4} label='test4' />
+					</Radio>
 				</Col>
 				<Col span={100}>
 					<Button
