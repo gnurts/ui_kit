@@ -86,7 +86,6 @@ const ActionSheet = ({ isOpen, onClose, animateDuration, children }) => {
             visible={visible}
             animationType='fade'
             onShow={release}
-            // onRequestClose={() => console.log('back press')}
         >
             <KeyboardAvoidingView
                 behavior='height'

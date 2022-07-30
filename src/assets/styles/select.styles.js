@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'gray',
         borderRadius: 3,
-        margin: 10,
     },
     select: {
         paddingHorizontal: 10,
