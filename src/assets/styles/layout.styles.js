@@ -6,6 +6,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap'
     },
+    col: {
+        display: 'flex',
+        justifyContent: 'center'
+    },
     center: {
         display: 'flex',
         justifyContent: 'center',
