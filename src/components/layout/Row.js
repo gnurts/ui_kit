@@ -5,7 +5,7 @@ import { isArray, isNumber } from '../../utils/checkType'
 import { LayoutContext } from '../Context'
 import styles from '../../assets/styles/layout.styles'
 
-const Row = ({ children, gutter }) => {
+const Row = ({ children, gutter, style }) => {
     const gutterX = useRef(0)
     const gutterY = useRef(0)
 
@@ -44,6 +44,7 @@ const Row = ({ children, gutter }) => {
                 style={[ styles.row, {
                     paddingVertical: gutterY.current,
                     paddingHorizontal: gutterX.current,
+                    ...style
                 } ]}
             >
                 {isArray(children) ? (
