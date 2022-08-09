@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
-import { Button, Pressable, View, ScrollView, Modal } from 'react-native'
+import { Button, Pressable, View, ScrollView, Modal, TextInput } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Input from './src/components/Input'
 import Select from './src/components/Select'
@@ -124,12 +124,16 @@ const App = () => {
 		<Container>
 			<ActionSheet
 				isOpen={openActionSheet}
-				onClose={() => setOpenActionSheet(false)}
+				onClose={() => setOpenActionSheet(() => {
+					console.log('set state false')
+
+					return false
+				})}
 			>
 				<ActionSheetContent />
 			</ActionSheet>
 			<Row gutter={[12, 12]}>
-				<Col span={100}>
+				{/* <Col span={100}>
 					<Select
 						placeholder='test select'
 						onchange={value => console.log(value)}
@@ -147,31 +151,22 @@ const App = () => {
 						<Radio.Option value={3} label='test3' />
 						<Radio.Option value={4} label='test4' />
 					</Radio>
-				</Col>
+				</Col> */}
 				<Col span={100}>
 					<Button
 						title='openActionSheet'
 						onPress={() => {
 							console.log('press')
-							setOpenActionSheet(true)
+							setOpenActionSheet(() => {
+								console.log('set state true')
+			
+								return true
+							})
 						}}
 					/>
 				</Col>
-				<Col span={50}>
-					<View style={{
-						width: '100%',
-						height: 100,
-						backgroundColor: 'red'
-					}}>
-					</View>
-				</Col>
-				<Col span={50}>
-					<View style={{
-						width: '100%',
-						height: 100,
-						backgroundColor: 'blue'
-					}}></View>
-				</Col>
+			</Row>
+			<Row gutter={10}>
 				<Col span={100}>
 					<Input
 						ref={refs[0]}

@@ -15,11 +15,17 @@ const focus = {
     borderColor: INPUT_FOCUS_BORDER_COLOR
 }
 
-const input = {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+const inputContainer = {
     flex: 1,
-    color: TEXT_COLOR
+    marginHorizontal: 10,
+    position: 'relative',
+}
+
+const input = {
+    paddingHorizontal: 0,
+    paddingVertical: 5,
+    color: TEXT_COLOR,
+    width: '100%'
 }
 
 const right = {
@@ -30,12 +36,20 @@ const left = {
     paddingLeft: 10,
 }
 
+const label = {
+    position: 'absolute',
+    backgroundColor: '#f2f2f2',
+    textAlignVertical: 'center'
+}
+
 const styles = StyleSheet.create({
     blur,
     focus,
+    inputContainer,
     input,
     right,
     left,
+    label,
     placeholderTextColor: PLACEHOLDER_COLOR
 })
 

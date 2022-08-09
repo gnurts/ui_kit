@@ -1,5 +1,5 @@
-import React, { useState, forwardRef, useRef, useEffect, memo, useCallback, useMemo } from 'react'
-import { View, TextInput, Pressable } from 'react-native'
+import React, { useState, forwardRef, useRef, useEffect, memo, useCallback } from 'react'
+import { View, TextInput, Pressable, Text, Animated  } from 'react-native'
 import styles from '../assets/styles/input.styles'
 import { isFunction, isObject } from '../utils/checkType'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -7,17 +7,15 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 const BLUR = 'blur'
 const FOCUS = 'focus'
 
-const Clear = ({ value, onClear }) => {
+const Clear = ({ onClear }) => {
     return (
-        <>{value && (
-            <Icon
-                style={styles.right}
-                onPress={onClear}
-                name='close'
-                size={20}
-                color={styles.placeholderTextColor}
-            />
-        )}</>
+        <Icon
+            style={styles.right}
+            onPress={onClear}
+            name='close'
+            size={20}
+            color={styles.placeholderTextColor}
+        />
     )
 }
 
@@ -43,9 +41,28 @@ const RightAddon = memo(({ rightAddon, onPress }) => {
     )
 })
 
-const Input = ({ placeholder, value, onFocus, onBlur, onPressIn, onChangeText, leftAddon, rightAddon, showSoftInputOnFocus, onSubmitEditing }, ref) => {
+const Input = (
+    {
+        placeholder,
+        value,
+        onFocus,
+        onBlur,
+        onPressIn,
+        onChangeText,
+        leftAddon,
+        rightAddon,
+        showSoftInputOnFocus,
+        onSubmitEditing,
+        keyboardType,
+        label
+    },
+    ref
+) => {
     const inputRef = useRef(null)
-    const [inputState, setInputState] = useState(BLUR)
+    const [inputState,
+        setInputState] = useState(BLUR)
+    const stateValue = useRef(new Animated.Value(0)).current
+    const labelTranslateLeftMax = useRef(0)
 
     const focus = () => inputRef.current.focus()
 
@@ -72,9 +89,27 @@ const Input = ({ placeholder, value, onFocus, onBlur, onPressIn, onChangeText, l
 
     const handleClear = () => {
         focus()
-        handleChangeText(null)
+        handleChangeText('')
         isFunction(onPressIn) && onPressIn()
     }
+
+    const handleLayoutLabel = ({ nativeEvent: { layout: { width } } }) => {
+        labelTranslateLeftMax.current = (width * 0.8 - width) / 2
+    }
+
+    useEffect(() => {
+        inputState === FOCUS && Animated.timing(stateValue, {
+            toValue: 1,
+            duration: 200,
+            useNativeDriver: true
+        }).start()
+
+        inputState === BLUR && Animated.timing(stateValue, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true
+        }).start()
+    }, [inputState])
 
     useEffect(() => {
         if(isObject(ref) && 'current' in ref) {
@@ -86,6 +121,7 @@ const Input = ({ placeholder, value, onFocus, onBlur, onPressIn, onChangeText, l
         <View
             style={styles[inputState]}
             accessible={true}
+            onMoveShouldSetResponderCapture={() => true}
         >
             {leftAddon && (
                 <LeftAddon
@@ -93,23 +129,43 @@ const Input = ({ placeholder, value, onFocus, onBlur, onPressIn, onChangeText, l
                     onPress={handlePressIn}
                 />
             )}
-            <TextInput
-                style={styles.input}
-                ref={inputRef}
-                placeholder={placeholder}
-                placeholderTextColor={styles.placeholderTextColor}
-                value={value}
-                showSoftInputOnFocus={showSoftInputOnFocus}
-                onSubmitEditing={onSubmitEditing}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                onChangeText={handleChangeText}
-                onPressIn={handlePressIn}
-            />
-            <Clear
-                value={value}
-                onClear={handleClear}
-            />
+            <Pressable
+                style={styles.inputContainer}
+                onPress={handlePressIn}
+            >
+                <TextInput
+                    style={styles.input}
+                    ref={inputRef}
+                    placeholder={placeholder}
+                    placeholderTextColor={styles.placeholderTextColor}
+                    value={value}
+                    keyboardType={keyboardType || 'default'}
+                    showSoftInputOnFocus={showSoftInputOnFocus}
+                    onSubmitEditing={onSubmitEditing}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                    onChangeText={handleChangeText}
+                />
+                {label && (
+                    <Animated.Text
+                        onLayout={handleLayoutLabel}
+                        style={[
+                            styles.label,
+                            {
+                                height: inputState === FOCUS ? 'auto' : '100%',
+                                transform: [
+                                    { translateY: stateValue.interpolate({ inputRange: [0, 1], outputRange: [0, -10] }) },
+                                    { translateX: stateValue.interpolate({ inputRange: [0, 1], outputRange: [0, labelTranslateLeftMax.current] }) },
+                                    { scale: stateValue.interpolate({ inputRange: [0, 1], outputRange: [1, 0.8] }) },
+                                ]
+                            }
+                        ]}
+                    >
+                        {label}
+                    </Animated.Text>
+                )}
+            </Pressable>
+            {value && <Clear onClear={handleClear}/>}
             {rightAddon && (
                 <RightAddon
                     rightAddon={rightAddon}

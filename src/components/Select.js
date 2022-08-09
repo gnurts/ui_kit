@@ -25,9 +25,15 @@ const Option = ({ value, label }) => {
 	)
 }
 
-const Select = ({ placeholder, onchange, animateDuration, children }) => {
+const Select = ({ placeholder, onchange, animateDuration, defaultValue, children }) => {
 	const [isOpen, setIsOpen] = useState(false)
-	const [selectedLabel, setSelectedLabel] = useState(null)
+	const [selectedLabel, setSelectedLabel] = useState(() => {
+		for(const { props } of children) {
+			if(props.value === defaultValue) return props.label
+		}
+
+		return null
+	})
 	
 	const handleCloseActionSheet = () => {
 		setIsOpen(false)
