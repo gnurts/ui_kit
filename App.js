@@ -156,7 +156,7 @@ const App = () => {
 						ref={refs[0]}
 						onPressIn={() => changeFocus(0)}
 						onSubmitEditing={nextFocus}
-						showSoftInputOnFocus={false}
+						showSoftInputOnFocus={true}
 						placeholder='ex: 192.168.0.1:8000'
 						value={testValue}
 						onChangeText={setTestValue}
@@ -168,7 +168,7 @@ const App = () => {
 						ref={refs[1]}
 						onPressIn={() => changeFocus(1)}
 						onSubmitEditing={nextFocus}
-						showSoftInputOnFocus={false}
+						showSoftInputOnFocus={true}
 						placeholder='test in put'
 						value={testValue}
 						onChangeText={setTestValue}
@@ -180,7 +180,8 @@ const App = () => {
 						ref={refs[2]}
 						onPressIn={() => changeFocus(2)}
 						onSubmitEditing={nextFocus}
-						showSoftInputOnFocus={false}
+						showSoftInputOnFocus={true}
+						label='test in put'
 						placeholder='test in put'
 						value={testValue}
 						onChangeText={setTestValue}

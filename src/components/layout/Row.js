@@ -47,11 +47,11 @@ const Row = ({ children, gutter, style }) => {
                     ...style
                 } ]}
             >
-                {isArray(children) ? (
+                {children && (isArray(children) ? (
                     children.map(render)
                 ) : (
                     [children].map(render)
-                )}
+                ))}
             </View>
         </LayoutContext.Provider>
     )
