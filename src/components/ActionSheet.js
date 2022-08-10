@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { isNumber } from '../utils/checkType'
-import { Keyboard, Pressable, Animated, Dimensions, Easing, KeyboardAvoidingView, StatusBar, View, ActivityIndicator, Modal } from 'react-native'
+
+import { Keyboard, Pressable, Animated, Dimensions, Easing, KeyboardAvoidingView, StatusBar, View, Modal } from 'react-native'
 import styles from '../assets/styles/action-sheet.styles'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -75,10 +76,6 @@ const ActionSheet = ({ isOpen, onClose, animateDuration, children }) => {
             hideSubscription.remove()
         }
     }, [])
-
-    useEffect(() => {
-        console.log(`visible: ${visible}`)
-    }, [visible])
 
     useEffect(() =>{
         isOpen ? setVisible(true) : close()
