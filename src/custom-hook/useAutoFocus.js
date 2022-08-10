@@ -12,7 +12,6 @@ const useAutoForus = ({ refs, order, start = 0 }) => {
     const currentFocus = useRef(start)
 
     const focus = () => {
-        console.log(currentFocus.current)
         const __focus = refs[order[currentFocus.current]].current.focus
         isFunction(__focus) && __focus()
     }
@@ -30,7 +29,6 @@ const useAutoForus = ({ refs, order, start = 0 }) => {
     }
 
     useEffect(() => {
-        console.log('mouted')
         focus()
     }, [])
 

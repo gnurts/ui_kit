@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { isNumber } from '../utils/checkType'
+import useMouted from '../custom-hook/useMounted'
 
 import { Keyboard, Pressable, Animated, Dimensions, Easing, KeyboardAvoidingView, StatusBar, View, Modal } from 'react-native'
 import styles from '../assets/styles/action-sheet.styles'
@@ -11,6 +12,7 @@ const ActionSheet = ({ isOpen, onClose, animateDuration, children }) => {
     if(!isNumber(animateDuration)) animateDuration = 300
     
     const [actionSheetMaxHeight, setActionSheetMaxHeight] = useState(ACTIONSHEET_MAX_HEIGHT)
+    const mouted = useMouted()
     const [visible, setVisible] = useState(false)
     const actionSheetHeight = useRef(null)
     const moveValue = useRef(SCREEN_HEIGHT)
@@ -78,7 +80,9 @@ const ActionSheet = ({ isOpen, onClose, animateDuration, children }) => {
     }, [])
 
     useEffect(() =>{
-        isOpen ? setVisible(true) : close()
+        if(mouted) {
+            isOpen ? setVisible(true) : close()
+        }
     }, [isOpen])
     
     return (

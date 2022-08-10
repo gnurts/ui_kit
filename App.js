@@ -115,20 +115,11 @@ const App = () => {
 		start: 0
 	})
 	
-
-	useEffect(() => {
-		console.log(openActionSheet)
-	}, [openActionSheet])
-
     return (
 		<Container>
 			<ActionSheet
 				isOpen={openActionSheet}
-				onClose={() => setOpenActionSheet(() => {
-					console.log('set state false')
-
-					return false
-				})}
+				onClose={() => setOpenActionSheet(false)}
 			>
 				<ActionSheetContent />
 			</ActionSheet>
@@ -155,14 +146,7 @@ const App = () => {
 				<Col span={100}>
 					<Button
 						title='openActionSheet'
-						onPress={() => {
-							console.log('press')
-							setOpenActionSheet(() => {
-								console.log('set state true')
-			
-								return true
-							})
-						}}
+						onPress={() => setOpenActionSheet(true)}
 					/>
 				</Col>
 			</Row>

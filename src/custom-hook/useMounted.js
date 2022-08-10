@@ -1,10 +1,13 @@
-import { useEffect } from 'react'
-import { isFunction } from '../utils/checkType'
+import { useEffect, useState } from 'react'
 
-const useMounted = (callback) => {
-    if(!isFunction(callback)) throw new Error('callback must be a function')
-    
-    useEffect(callback, [])
+const useMounted = () => {
+    const [mouted, setMouted] = useState(false)
+
+    useEffect(() => {
+        setMouted(true)
+    }, [])
+
+    return mouted
 }
 
 export default useMounted
