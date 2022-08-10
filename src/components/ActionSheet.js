@@ -83,7 +83,7 @@ const ActionSheet = ({ isOpen, onClose, animateDuration, children }) => {
         if(mouted) {
             isOpen ? setVisible(true) : close()
         }
-    }, [isOpen])
+    }, [isOpen, mouted])
     
     return (
         <Modal
