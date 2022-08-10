@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { isNumber } from '../utils/checkType'
-import useMouted from '../custom-hook/useMounted'
-
 import { Keyboard, Pressable, Animated, Dimensions, Easing, KeyboardAvoidingView, StatusBar, View, Modal } from 'react-native'
 import styles from '../assets/styles/action-sheet.styles'
 
