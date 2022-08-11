@@ -219,6 +219,7 @@ const App = () => {
 					<Button
 						title='test 2'
 						icon={<Text>hello</Text>}
+						loading={false}
 					/>
 				</Col>
 			</Row>

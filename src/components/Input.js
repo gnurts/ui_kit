@@ -54,14 +54,14 @@ const Input = (
         showSoftInputOnFocus,
         onSubmitEditing,
         keyboardType,
-        label
+        label,
+        editable = true
     },
     ref
 ) => {
     const inputRef = useRef(null)
-    const [inputState,
-        setInputState] = useState(BLUR)
-    const stateValue = useRef(new Animated.Value(0)).current
+    const [inputState, setInputState] = useState(BLUR)
+    const stateValue = useRef(new Animated.Value(value ? 1 : 0)).current
     const labelTranslateLeftMax = useRef(0)
 
     const focus = () => inputRef.current.focus()
@@ -100,13 +100,13 @@ const Input = (
     useEffect(() => {
         inputState === FOCUS && Animated.timing(stateValue, {
             toValue: 1,
-            duration: 200,
+            duration: 80,
             useNativeDriver: true
         }).start()
 
-        inputState === BLUR && Animated.timing(stateValue, {
+        inputState === BLUR && !value && Animated.timing(stateValue, {
             toValue: 0,
-            duration: 200,
+            duration: 80,
             useNativeDriver: true
         }).start()
     }, [inputState])
@@ -145,6 +145,7 @@ const Input = (
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                     onChangeText={handleChangeText}
+                    editable={editable}
                 />
                 {label && (
                     <Animated.Text
@@ -152,9 +153,9 @@ const Input = (
                         style={[
                             styles.label,
                             {
-                                height: inputState === FOCUS ? 'auto' : '100%',
+                                color: inputState === FOCUS ? '#3E4095' : styles.placeholderTextColor,
                                 transform: [
-                                    { translateY: stateValue.interpolate({ inputRange: [0, 1], outputRange: [0, -10] }) },
+                                    { translateY: stateValue.interpolate({ inputRange: [0, 1], outputRange: [9, -11] }) },
                                     { translateX: stateValue.interpolate({ inputRange: [0, 1], outputRange: [0, labelTranslateLeftMax.current] }) },
                                     { scale: stateValue.interpolate({ inputRange: [0, 1], outputRange: [1, 0.8] }) },
                                 ]
@@ -165,7 +166,7 @@ const Input = (
                     </Animated.Text>
                 )}
             </Pressable>
-            {value && <Clear onClear={handleClear}/>}
+            {value && editable && <Clear onClear={handleClear}/>}
             {rightAddon && (
                 <RightAddon
                     rightAddon={rightAddon}
