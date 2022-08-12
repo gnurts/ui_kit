@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { BUTTON_RIPPLE_COLOR } from './variable.styles'
+import { BUTTON_RIPPLE_COLOR, DANGER, SUCCESS, INFO } from './variable.styles'
 
 const styles = StyleSheet.create({
     container: {
@@ -16,7 +16,10 @@ const styles = StyleSheet.create({
     left: {
         marginLeft: 10
     },
-    rippleColor: BUTTON_RIPPLE_COLOR
+    rippleColor: BUTTON_RIPPLE_COLOR,
+    danger: DANGER,
+    success: SUCCESS,
+    info: INFO
 })
 
 export default styles
