@@ -21,7 +21,6 @@ const ActionSheet = ({ isOpen, onClose, animateDuration, children }) => {
     const onClosed = useCallback(({ finished }) => {
         if(finished) {
             setVisible(false)
-            Keyboard.dismiss()
         }
     }, [])
 

@@ -51,7 +51,7 @@ const Input = (
         onChangeText,
         leftAddon,
         rightAddon,
-        showSoftInputOnFocus,
+        showSoftInputOnFocus = false,
         onSubmitEditing,
         keyboardType,
         label,
