@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import uuid from 'react-native-uuid'
 import { View } from 'react-native'
-import { isArray, isNumber } from '../../utils/checkType'
+import { isArray, isNumber, isObject } from '../../utils/checkType'
 import { LayoutContext } from '../Context'
 import styles from '../../assets/styles/layout.styles'
 
@@ -18,21 +18,23 @@ const Row = ({ children, gutter, style }) => {
     }
 
     const render = child => {
-        const { name } = child.type
-
-        if(name === 'Col') return child
-
-        return (
-            <View
-                key={uuid.v4()}
-                style={{
-                    paddingVertical: gutterY.current,
-                    paddingHorizontal: gutterX.current,
-                }}
-            >
-                {child}
-            </View>
-        )
+        if(isObject(child)) {
+            const { name } = child.type
+    
+            if(name === 'Col') return child
+    
+            return (
+                <View
+                    key={uuid.v4()}
+                    style={{
+                        paddingVertical: gutterY.current,
+                        paddingHorizontal: gutterX.current,
+                    }}
+                >
+                    {child}
+                </View>
+            )
+        }
     }
     
     return (
