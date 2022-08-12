@@ -4,8 +4,6 @@ import { Pressable, View, Text, ActivityIndicator } from 'react-native'
 import styles from '../assets/styles/button.styles'
 import { isString } from '../utils/checkType'
 
-const { danger, success, info } = styles 
-
 const Button = ({
     title,
     icon,
