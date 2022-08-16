@@ -44,7 +44,7 @@ const RightAddon = memo(({ rightAddon, onPress }) => {
 const Input = (
     {
         placeholder,
-        value,
+        value = '',
         onFocus,
         onBlur,
         onPressIn,
@@ -59,6 +59,7 @@ const Input = (
     },
     ref
 ) => {
+    if(!isString(value)) value = value.toString()
     const inputRef = useRef(null)
     const [inputState, setInputState] = useState(BLUR)
     const stateValue = useRef(new Animated.Value(value ? 1 : 0)).current
