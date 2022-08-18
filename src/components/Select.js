@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, isValidElement } from 'react'
 import { Pressable, TextInput, TouchableHighlight } from 'react-native'
 import { SelectContext } from './Context'
 import { isFunction } from '../utils/checkType'
 import Text from './Text'
+import Center from './layout/Center'
 import ActionSheet from './ActionSheet'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import styles from '../assets/styles/select.styles'
@@ -25,11 +26,39 @@ const Option = ({ value, label }) => {
 	)
 }
 
-const Select = ({ placeholder, onchange, animateDuration, defaultValue, children }) => {
+const Empty = ({ message }) => {
+	return (
+		<Center>
+			<Icon
+				name='copy'
+				size={50}
+				color='gray'
+				style={{
+					marginTop: 20
+				}}
+			/>
+			<Text style={{ marginVertical: 20 }}>
+				{ message }
+			</Text>
+		</Center>
+	)
+}
+
+const Select = ({
+	placeholder,
+	onchange,
+	animateDuration,
+	defaultValue,
+	children,
+	empty = 'no data'
+}) => {
+	console.log(children)
 	const [isOpen, setIsOpen] = useState(false)
 	const [selectedLabel, setSelectedLabel] = useState(() => {
-		for(const { props } of children) {
-			if(props.value === defaultValue) return props.label
+		for(const child of children) {
+			if(isValidElement(child)) {
+				if(child.props.value === defaultValue) return child.props.label
+			}
 		}
 
 		return null
@@ -72,7 +101,11 @@ const Select = ({ placeholder, onchange, animateDuration, defaultValue, children
 				onClose={handleCloseActionSheet}
 				animateDuration={animateDuration}
 			>
-				{children}
+				{children.length ? (
+					children
+				) : (
+					<Empty message={empty} />
+				)}
 			</ActionSheet>
 		</SelectContext.Provider>
 	)

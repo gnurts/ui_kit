@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
-import { Pressable, View, ScrollView, Modal, TextInput, TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, Animated } from 'react-native'
+import { Pressable, View, ScrollView, Modal, TextInput, TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, Animated, VirtualizedList } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Input from './src/components/Input'
 import Select from './src/components/Select'
@@ -16,99 +16,47 @@ import Button from './src/components/Button'
 const Addon = <Icon name='user' size={20} color='gray' />
 
 const ActionSheetContent = () => {
-	const [testValue, setTestValue] = useState(null)
+	const _data = new Array(100000).fill(null).map(() => Math.random().toFixed(2))
+	console.log(_data)
 	
+	const getItem = (data, index) => data[index] 
+
+	const getItemCount = data => data.length
+
+	const renderItem = ({item}) => {
+		return (
+			<View
+				style={{
+					margin: 10,
+					padding: 10,
+					borderRadius: 3,
+					backgroundColor: 'gray',
+				}}
+			>
+				<Text>{item}</Text>
+				<Text>{item}</Text>
+				<Text>{item}</Text>
+			</View>
+		)
+	}
+
 	return (
-		<ScrollView keyboardShouldPersistTaps='always'>
-			<Row gutter={10}>
-				<Col span={100}>
-					<Input
-						placeholder='ex: 192.168.0.1:8000'
-						value={testValue}
-						onChangeText={setTestValue}
-						leftAddon={<Text style={{ borderRightWidth: 1, borderColor: 'gray', paddingRight: 10, width: 60, color: 'gray' }}>API</Text>}
-					/>
-				</Col>
-				<Col span={100}>
-					<Input
-						placeholder='test in put'
-						value={testValue}
-						onChangeText={setTestValue}
-						leftAddon={<Text style={{ borderRightWidth: 1, borderColor: 'gray', paddingRight: 10, width: 60, color: 'gray' }}>Socket</Text>}
-					/>
-				</Col>
-				<Col span={100}>
-					<Input
-						placeholder='test in put'
-						value={testValue}
-						onChangeText={setTestValue}
-						leftAddon={Addon}
-					/>
-				</Col>
-				<Col span={100}>
-					<Input
-						placeholder='test in put'
-						value={testValue}
-						onChangeText={setTestValue}
-						leftAddon={Addon}
-					/>
-				</Col>
-				<Col span={100}>
-					<Input
-						placeholder='test in put'
-						value={testValue}
-						onChangeText={setTestValue}
-						leftAddon={Addon}
-					/>
-				</Col>
-				<Col span={100}>
-					<Input
-						placeholder='test in put'
-						value={testValue}
-						onChangeText={setTestValue}
-						leftAddon={Addon}
-					/>
-				</Col>
-				<Col span={100}>
-					<Input
-						placeholder='test in put'
-						value={testValue}
-						onChangeText={setTestValue}
-						leftAddon={Addon}
-					/>
-				</Col>
-				<Col span={100}>
-					<Input
-						placeholder='test in put'
-						value={testValue}
-						onChangeText={setTestValue}
-						leftAddon={Addon}
-					/>
-				</Col>
-				<Col span={100}>
-					<Input
-						placeholder='test in put'
-						value={testValue}
-						onChangeText={setTestValue}
-						leftAddon={Addon}
-					/>
-				</Col>
-				<Col span={100}>
-					<Input
-						placeholder='test in put'
-						value={testValue}
-						onChangeText={setTestValue}
-						leftAddon={Addon}
-					/>
-				</Col>
-			</Row>
-		</ScrollView>
+		<VirtualizedList
+			data={_data}
+			getItem={getItem}
+			getItemCount={getItemCount}
+			renderItem={renderItem}
+			keyExtractor={(item, index) => `${item}${index}`}
+			removeClippedSubviews={true}
+			initialNumToRender={5}
+			updateCellsBatchingPeriod={1000}
+		/>
 	)
 }
 
 const App = () => {
     const [openActionSheet, setOpenActionSheet] = useState(false)
-	const [testValue, setTestValue] = useState(null)
+	const [testValue, setTestValue] = useState('')
 	const refs = [useRef(), useRef(), useRef()]
 	// const { nextFocus, changeFocus } = useAutoForus({
 	// 	refs,
@@ -190,37 +138,6 @@ const App = () => {
 					/>
 				</Col>
 				<Col span={100}>
-				</Col>
-				<Col span={100}>
-					<View
-						style={{
-							borderRadius: 3,
-							overflow: 'hidden',
-							elevation: 2
-						}}
-					>
-						<Pressable
-							android_ripple={{
-								color: 'rgba(0, 0, 0, 0.15)',
-							}}
-							style={{
-								backgroundColor: 'red',
-								paddingVertical: 10,
-								paddingHorizontal: 20,
-								alignItems: 'center'
-							}}
-							onPress={() => {}}
-						>
-							<Text style={{ color: 'white', fontWeight: 'bold' }}>test</Text>
-						</Pressable>
-					</View>
-				</Col>
-				<Col span={100}>
-					<Button
-						title='test 2'
-						icon={<Text>hello</Text>}
-						loading={false}
-					/>
 				</Col>
 			</Row>
 		</Container>

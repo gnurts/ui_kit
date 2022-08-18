@@ -1,7 +1,7 @@
 import React, { useState, forwardRef, useRef, useEffect, memo, useCallback } from 'react'
 import { View, TextInput, Pressable, Text, Animated  } from 'react-native'
 import styles from '../assets/styles/input.styles'
-import { isFunction, isObject } from '../utils/checkType'
+import { isFunction, isObject, isString } from '../utils/checkType'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 const BLUR = 'blur'
