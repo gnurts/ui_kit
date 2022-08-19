@@ -87,6 +87,7 @@ const Select = ({
 				<TextInput
 					style={styles.select}
 					placeholder={placeholder}
+					placeholderTextColor={styles.placeholderColor}
 					editable={false}
 					value={selectedLabel}
 				/>

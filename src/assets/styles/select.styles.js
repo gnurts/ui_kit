@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { PLACEHOLDER_COLOR } from './variable.styles'
 
 const styles = StyleSheet.create({
     container: {
@@ -15,7 +16,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 5,
         flex: 1,
-        color: 'gray'
+        color: 'black'
     },
     option: {
         display: 'flex',
@@ -25,7 +26,8 @@ const styles = StyleSheet.create({
     },
     arrow: {
         marginRight: 10
-    }
+    },
+    placeholderColor: PLACEHOLDER_COLOR
 })
 
 export default styles
