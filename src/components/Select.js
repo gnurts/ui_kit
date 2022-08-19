@@ -1,4 +1,4 @@
-import React, { useState, useContext, isValidElement } from 'react'
+import React, { useState, useContext, isValidElement, useEffect, useRef } from 'react'
 import { Pressable, TextInput, TouchableHighlight } from 'react-native'
 import { SelectContext } from './Context'
 import { isFunction } from '../utils/checkType'
@@ -48,21 +48,13 @@ const Select = ({
 	placeholder,
 	onchange,
 	animateDuration,
-	defaultValue,
+	value,
 	children,
 	empty = 'no data'
 }) => {
-	console.log(children)
 	const [isOpen, setIsOpen] = useState(false)
-	const [selectedLabel, setSelectedLabel] = useState(() => {
-		for(const child of children) {
-			if(isValidElement(child)) {
-				if(child.props.value === defaultValue) return child.props.label
-			}
-		}
-
-		return null
-	})
+	const [selectedLabel, setSelectedLabel] = useState(null)
+	const selectedOption = useRef(null)
 	
 	const handleCloseActionSheet = () => {
 		setIsOpen(false)
@@ -73,10 +65,18 @@ const Select = ({
 	}
 
 	const setSelectedOption = ({ value, label }) => {
-		setSelectedLabel(label)
+		selectedOption.current = { value, label }
 		isFunction(onchange) && onchange(value)
 		handleCloseActionSheet()
 	}
+
+	useEffect(() => {
+		if(value) {
+			value === selectedOption.current.value && setSelectedLabel(selectedOption.current.label)
+		} else {
+			setSelectedLabel(null)
+		}
+	}, [value])
 
 	return (
 		<SelectContext.Provider value={{ setSelectedOption }}>
