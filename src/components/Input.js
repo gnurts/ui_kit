@@ -1,7 +1,7 @@
 import React, { useState, forwardRef, useRef, useEffect, memo, useCallback } from 'react'
 import { View, TextInput, Pressable, Text, Animated  } from 'react-native'
 import styles from '../assets/styles/input.styles'
-import { isFunction, isObject, isString } from '../utils/checkType'
+import { isFunction, isObject, isNull, isString } from '../utils/checkType'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 const BLUR = 'blur'
@@ -55,10 +55,12 @@ const Input = (
         onSubmitEditing,
         keyboardType,
         label,
-        editable = true
+        editable = true,
+        blurOnSubmit = true
     },
     ref
 ) => {
+    if(isNull(value)) value = 'null'
     if(!isString(value)) value = value.toString()
     const inputRef = useRef(null)
     const [inputState, setInputState] = useState(BLUR)
@@ -147,6 +149,7 @@ const Input = (
                     onBlur={handleBlur}
                     onChangeText={handleChangeText}
                     editable={editable}
+                    blurOnSubmit={blurOnSubmit}
                 />
                 {label && (
                     <Animated.Text

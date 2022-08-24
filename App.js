@@ -1,5 +1,5 @@
-import React, { memo, useEffect, useRef, useState } from 'react'
-import { Pressable, View, ScrollView, Modal, TextInput, TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, Animated, VirtualizedList } from 'react-native'
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { FlatList, Pressable, View, ScrollView, Modal, TextInput, TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, Animated, VirtualizedList } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Input from './src/components/Input'
 import Select from './src/components/Select'
@@ -15,41 +15,60 @@ import Button from './src/components/Button'
 
 const Addon = <Icon name='user' size={20} color='gray' />
 
+const Item = memo(({item}) => {
+	console.log('render')
+	
+	return (
+		<View
+			style={{
+				margin: 10,
+				padding: 10,
+				borderRadius: 3,
+				backgroundColor: 'gray',
+			}}
+		>
+			<Text>{item}</Text>
+			<Text>{item}</Text>
+			<Text>{item}</Text>
+		</View>
+	)
+})
+
 const ActionSheetContent = () => {
-	const _data = new Array(100000).fill(null).map(() => Math.random().toFixed(2))
-	console.log(_data)
+	const [data, setData] = useState(new Array(10).fill(null).map(() => Math.random().toFixed(2)))
+	const [itemCount, setItemCount] = useState(4)
+	// const viewabilityConfig = useRef({
+	// 	waitForInteraction: true,
+	// 	minimumViewTime: 1000,
+	// 	viewAreaCoveragePercentThreshold: 95,
+	// 	// itemVisiblePercentThreshold: 75
+	// }).current
+
+	// const onViewableItemsChanged = useRef(({ viewableItems, changed }) => {
+	// 	console.log({ viewableItems, changed })
+	// }).current
 	
 	const getItem = (data, index) => data[index] 
 
-	const getItemCount = data => data.length
+	const getItemCount = data => itemCount
 
-	const renderItem = ({item}) => {
-		return (
-			<View
-				style={{
-					margin: 10,
-					padding: 10,
-					borderRadius: 3,
-					backgroundColor: 'gray',
-				}}
-			>
-				<Text>{item}</Text>
-				<Text>{item}</Text>
-				<Text>{item}</Text>
-			</View>
-		)
+	const renderItem = ({item}) => <Item item={item} />
+
+	const onEndReached = () => {
+		if(itemCount < data.length) setItemCount(prev => prev + 5 > data.length ? data.length : prev + 5)
 	}
 
 	return (
 		<VirtualizedList
-			data={_data}
+			data={data}
 			getItem={getItem}
 			getItemCount={getItemCount}
 			renderItem={renderItem}
 			keyExtractor={(item, index) => `${item}${index}`}
-			removeClippedSubviews={true}
-			initialNumToRender={5}
-			updateCellsBatchingPeriod={1000}
+			onEndReached={onEndReached}
+			// removeClippedSubviews={true}
+			// viewabilityConfig={viewabilityConfig}
+			// onViewableItemsChanged={onViewableItemsChanged}
 		/>
 	)
 }

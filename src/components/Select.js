@@ -1,4 +1,4 @@
-import React, { useState, useContext, isValidElement, useEffect, useRef } from 'react'
+import React, { useState, useContext, isValidElement, useEffect, useRef, memo } from 'react'
 import { Pressable, TextInput, TouchableHighlight } from 'react-native'
 import { SelectContext } from './Context'
 import { isFunction } from '../utils/checkType'
@@ -9,15 +9,15 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import styles from '../assets/styles/select.styles'
 
 const Option = ({ value, label }) => {
-	const { setSelectedOption } = useContext(SelectContext)
+	const { handleSelect } = useContext(SelectContext)
 	
-	const handlePress = () => setSelectedOption({ value, label }) 
+	const select = () => handleSelect({ value, label })
 
 	return (
 		<TouchableHighlight
 			style={styles.option}
 			underlayColor="#DDDDDD"
-			onPress={handlePress}
+			onPress={select}
 		>
 			{label && (
 				<Text>{label}</Text>
@@ -53,8 +53,8 @@ const Select = ({
 	empty = 'no data'
 }) => {
 	const [isOpen, setIsOpen] = useState(false)
-	const [selectedLabel, setSelectedLabel] = useState(null)
-	const selectedOption = useRef(null)
+	const [selectedOption, setSelectedOption] = useState({ label: null, value: null })
+	const selected = useRef(false)
 	
 	const handleCloseActionSheet = () => {
 		setIsOpen(false)
@@ -64,22 +64,28 @@ const Select = ({
 		setIsOpen(true)
 	}
 
-	const setSelectedOption = ({ value, label }) => {
-		selectedOption.current = { value, label }
+	const handleSelect = ({ value, label }) => {
+		selected.current = true
+		setSelectedOption({ value, label })
 		isFunction(onchange) && onchange(value)
 		handleCloseActionSheet()
 	}
 
 	useEffect(() => {
-		if(value) {
-			value === selectedOption.current.value && setSelectedLabel(selectedOption.current.label)
+		if(selected.current) {
+			selected.current = false
 		} else {
-			setSelectedLabel(null)
+			value && children.forEach(child => {
+				console.log('check')
+				if(child.props.value === value) {
+					setSelectedOption({ label: child.props.label, value: child.props.value })
+				}
+			})
 		}
 	}, [value])
 
 	return (
-		<SelectContext.Provider value={{ setSelectedOption }}>
+		<SelectContext.Provider value={{ handleSelect, value }}>
 			<Pressable
 				style={styles.container}
 				onPress={handleOpenActionSheet}
@@ -89,7 +95,7 @@ const Select = ({
 					placeholder={placeholder}
 					placeholderTextColor={styles.placeholderColor}
 					editable={false}
-					value={selectedLabel}
+					value={selectedOption.label}
 				/>
 				<Icon
 					style={styles.arrow}
