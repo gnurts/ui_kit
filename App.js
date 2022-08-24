@@ -16,37 +16,16 @@ import Button from './src/components/Button'
 const Addon = <Icon name='user' size={20} color='gray' />
 
 const Item = memo(({item}) => {
-	console.log('render')
-	
 	return (
-		<View
-			style={{
-				margin: 10,
-				padding: 10,
-				borderRadius: 3,
-				backgroundColor: 'gray',
-			}}
-		>
+		<Col span={100}>
 			<Text>{item}</Text>
-			<Text>{item}</Text>
-			<Text>{item}</Text>
-		</View>
+		</Col>
 	)
 })
 
 const ActionSheetContent = () => {
 	const [data, setData] = useState(new Array(10).fill(null).map(() => Math.random().toFixed(2)))
 	const [itemCount, setItemCount] = useState(4)
-	// const viewabilityConfig = useRef({
-	// 	waitForInteraction: true,
-	// 	minimumViewTime: 1000,
-	// 	viewAreaCoveragePercentThreshold: 95,
-	// 	// itemVisiblePercentThreshold: 75
-	// }).current
-
-	// const onViewableItemsChanged = useRef(({ viewableItems, changed }) => {
-	// 	console.log({ viewableItems, changed })
-	// }).current
 	
 	const getItem = (data, index) => data[index] 
 
@@ -59,17 +38,24 @@ const ActionSheetContent = () => {
 	}
 
 	return (
-		<VirtualizedList
-			data={data}
-			getItem={getItem}
-			getItemCount={getItemCount}
-			renderItem={renderItem}
-			keyExtractor={(item, index) => `${item}${index}`}
-			onEndReached={onEndReached}
-			// removeClippedSubviews={true}
-			// viewabilityConfig={viewabilityConfig}
-			// onViewableItemsChanged={onViewableItemsChanged}
-		/>
+		<Row gutter={10}>
+			<VirtualizedList
+				style={{ backgroundColor: 'gray' }}
+				data={data}
+				getItem={getItem}
+				getItemCount={getItemCount}
+				// renderItem={renderItem}
+				ListItemComponent={({item}) => {
+					return (
+						<Col span={100}>
+							<Text>{item}</Text>
+						</Col>
+					)
+				}}
+				keyExtractor={(item, index) => `${item}${index}`}
+				onEndReached={onEndReached}
+			/>
+		</Row>
 	)
 }
 
