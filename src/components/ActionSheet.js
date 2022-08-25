@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import { isNumber } from '../utils/checkType'
+import { isNumber, isFunction } from '../utils/checkType'
 import useMouted from '../custom-hook/useMounted'
 
 import { Keyboard, Pressable, Animated, Dimensions, Easing, KeyboardAvoidingView, StatusBar, View, Modal } from 'react-native'
@@ -8,7 +8,7 @@ import styles from '../assets/styles/action-sheet.styles'
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const ACTIONSHEET_MAX_HEIGHT = SCREEN_HEIGHT - StatusBar.currentHeight - 100
 
-const ActionSheet = ({ isOpen, onClose, animateDuration, children }) => {
+const ActionSheet = ({ isOpen, onClose, onEndClose, animateDuration, children }) => {
     if(!isNumber(animateDuration)) animateDuration = 300
     
     const [actionSheetMaxHeight, setActionSheetMaxHeight] = useState(ACTIONSHEET_MAX_HEIGHT)
@@ -21,6 +21,7 @@ const ActionSheet = ({ isOpen, onClose, animateDuration, children }) => {
     const onClosed = useCallback(({ finished }) => {
         if(finished) {
             setVisible(false)
+            isFunction(onEndClose) && onEndClose()
         }
     }, [])
 
@@ -33,13 +34,19 @@ const ActionSheet = ({ isOpen, onClose, animateDuration, children }) => {
         }).start(onClosed)
     }, [])
 
+    const onOpened = useCallback(({ finished }) => {
+        if(finished) {
+            Keyboard.dismiss()
+        }
+    })
+
     const release = useCallback(() => {
         Animated.timing(move, {
             toValue: 0,
             duration: animateDuration,
             easing: Easing.ease,
             useNativeDriver: true
-        }).start()
+        }).start(onOpened)
     }, [])
 
     const handleResponderMove = useCallback(e => {

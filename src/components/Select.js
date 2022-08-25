@@ -1,12 +1,21 @@
-import React, { useState, useContext, isValidElement, useEffect, useRef, memo } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
+import uuid from 'react-native-uuid'
 import { Pressable, TextInput, TouchableHighlight } from 'react-native'
 import { SelectContext } from './Context'
 import { isFunction } from '../utils/checkType'
+
+import { VirtualizedList } from 'react-native'
 import Text from './Text'
 import Center from './layout/Center'
 import ActionSheet from './ActionSheet'
+import Row from './layout/Row'
+import Col from './layout/Col'
+import Input from './Input'
 import Icon from 'react-native-vector-icons/FontAwesome'
+
 import styles from '../assets/styles/select.styles'
+
+const key = uuid.v4()
 
 const Option = ({ value, label }) => {
 	const { handleSelect } = useContext(SelectContext)
@@ -44,6 +53,36 @@ const Empty = ({ message }) => {
 	)
 }
 
+
+const List = ({ data, emptyMessage, search = '' }) => {
+	
+	const getItem = (data, index) => data[index]
+
+	const getItemCount = (data) => data.length
+
+	const renderItem = ({ item }) => {
+		if(search && String(item.props.label).toLowerCase().indexOf(search.toLowerCase()) === -1) return
+		return item
+	}
+
+	const keyExtractor = (item, index) => `${key}-${index}`
+	
+	return (
+		<VirtualizedList
+			data={data}
+			getItem={getItem}
+			getItemCount={getItemCount}
+			renderItem={renderItem}
+			ListEmptyComponent={<Empty message={emptyMessage} />}
+			keyExtractor={keyExtractor}
+			initialNumToRender={5}
+			updateCellsBatchingPeriod={1000}
+			windowSize={3}
+			removeClippedSubviews={true}
+		/>
+	)
+}
+
 const Select = ({
 	placeholder,
 	onchange,
@@ -54,6 +93,7 @@ const Select = ({
 }) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [selectedOption, setSelectedOption] = useState({ label: null, value: null })
+	const [search, setSearch] = useState('')
 	const selected = useRef(false)
 	
 	const handleCloseActionSheet = () => {
@@ -71,21 +111,29 @@ const Select = ({
 		handleCloseActionSheet()
 	}
 
+	const handleResetSearch = () => {
+		console.log('end close')
+		setSearch('')
+	}
+
 	useEffect(() => {
 		if(selected.current) {
 			selected.current = false
 		} else {
-			value && children.forEach(child => {
-				console.log('check')
-				if(child.props.value === value) {
-					setSelectedOption({ label: child.props.label, value: child.props.value })
-				}
-			})
+			if(value) {
+				children.forEach(child => {
+					if(child.props.value === value) {
+						setSelectedOption({ label: child.props.label, value: child.props.value })
+					}
+				})
+			} else {
+				setSelectedOption({ label: null, value: null })
+			}
 		}
 	}, [value])
 
 	return (
-		<SelectContext.Provider value={{ handleSelect, value }}>
+		<SelectContext.Provider value={{ handleSelect, value, search }}>
 			<Pressable
 				style={styles.container}
 				onPress={handleOpenActionSheet}
@@ -107,12 +155,22 @@ const Select = ({
 				isOpen={isOpen}
 				onClose={handleCloseActionSheet}
 				animateDuration={animateDuration}
+				onEndClose={handleResetSearch}
 			>
-				{children.length ? (
-					children
-				) : (
-					<Empty message={empty} />
-				)}
+				<List
+					data={children}
+					emptyMessage={empty}
+					search={search}
+				/>
+				<Row gutter={10}>
+					<Col span={100}>
+						<Input
+							placeholder='search'
+							value={search}
+							onChangeText={setSearch}
+						/>
+					</Col>
+				</Row>
 			</ActionSheet>
 		</SelectContext.Provider>
 	)
