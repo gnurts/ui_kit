@@ -4,7 +4,7 @@ import { isNumber } from '../../utils/checkType'
 import { LayoutContext } from '../Context'
 import styles from '../../assets/styles/layout.styles'
 
-const Col = ({ children, span }) => {
+const Col = ({ children, span, style }) => {
     const { gutterX, gutterY } = useContext(LayoutContext)
     
     return (
@@ -12,7 +12,8 @@ const Col = ({ children, span }) => {
             style={[styles.col, {
                 width : isNumber(span) ? `${span}%` : 0,
                 paddingVertical: gutterY,
-                paddingHorizontal: gutterX
+                paddingHorizontal: gutterX,
+                ...style
             }]}
         >
             {children}
