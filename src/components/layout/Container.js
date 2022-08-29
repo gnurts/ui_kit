@@ -1,6 +1,17 @@
 import React from 'react'
-import { KeyboardAvoidingView } from 'react-native'
+import { KeyboardAvoidingView, ScrollView } from 'react-native'
 import styles from '../../assets/styles/layout.styles'
+
+const Scroll = ({ children, center, style }) => {
+    return (
+        <ScrollView
+            style={[styles.container, center && styles.center, style ]}
+            keyboardDismissMode='interactive'
+        >
+            {children}
+        </ScrollView>
+    )
+}
 
 const Container = ({ children, center, style }) => {
     return (
@@ -12,5 +23,7 @@ const Container = ({ children, center, style }) => {
         </KeyboardAvoidingView>
     )
 }
+
+Container.Scroll = Scroll
 
 export default Container

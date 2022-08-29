@@ -130,7 +130,7 @@ const Input = (
     }, [inputState])
 
     useEffect(() => {
-        inputState === BLUR && setInputState(FOCUS)
+        if(value && inputState === BLUR) setInputState(FOCUS)
     }, [value])
 
     useEffect(() => {
