@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useRef, useEffect, memo, useCallback } from 'react'
-import { View, TextInput, Pressable, Text, Animated  } from 'react-native'
+import { View, TextInput, Pressable, Keyboard, Animated  } from 'react-native'
 import styles from '../assets/styles/input.styles'
 import { isFunction, isObject, isNull, isString } from '../utils/checkType'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -60,7 +60,7 @@ const Input = (
     },
     ref
 ) => {
-    if(isNull(value)) value = 'null'
+    if(isNull(value)) value = ''
     if(!isString(value)) value = value.toString()
     const inputRef = useRef(null)
     const [inputState, setInputState] = useState(BLUR)
@@ -100,19 +100,38 @@ const Input = (
         labelTranslateLeftMax.current = (width * 0.8 - width) / 2
     }
 
-    useEffect(() => {
-        inputState === FOCUS && Animated.timing(stateValue, {
+    const labelFocusAnimation = () => {
+        Animated.timing(stateValue, {
             toValue: 1,
             duration: 80,
             useNativeDriver: true
         }).start()
+    }
 
-        inputState === BLUR && !value && Animated.timing(stateValue, {
+    const labelBlurAnimation = () => {
+        Animated.timing(stateValue, {
             toValue: 0,
             duration: 80,
             useNativeDriver: true
         }).start()
+    }
+
+    useEffect(() => {
+        switch(inputState) {
+            case FOCUS:
+                labelFocusAnimation()
+                break
+            case BLUR:
+                !value && labelBlurAnimation()
+                break
+            default:
+                break
+        }
     }, [inputState])
+
+    useEffect(() => {
+        inputState === BLUR && setInputState(FOCUS)
+    }, [value])
 
     useEffect(() => {
         if(isObject(ref) && 'current' in ref) {
@@ -154,6 +173,7 @@ const Input = (
                 {label && (
                     <Animated.Text
                         onLayout={handleLayoutLabel}
+                        numberOfLines={1}
                         style={[
                             styles.label,
                             {
