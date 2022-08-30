@@ -2,11 +2,12 @@ import React from 'react'
 import { KeyboardAvoidingView, ScrollView } from 'react-native'
 import styles from '../../assets/styles/layout.styles'
 
-const Scroll = ({ children, center, style }) => {
+const Scroll = ({ children, style }) => {
     return (
         <ScrollView
-            style={[styles.container, center && styles.center, style ]}
+            style={[styles.container, style ]}
             keyboardDismissMode='interactive'
+            keyboardShouldPersistTaps='handled'
         >
             {children}
         </ScrollView>
