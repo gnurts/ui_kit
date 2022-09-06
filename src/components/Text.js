@@ -6,7 +6,7 @@ import styles from '../assets/styles/text.styles'
 const Text = ({
     children = '',
     style,
-    numberOfLines
+    ...props
 }) => {
     if(isNull(children)) children = ''
     if(!isString(children)) children = children.toString()
@@ -14,7 +14,7 @@ const Text = ({
     return (
         <RNText
             style={[styles, {...style}]}
-            numberOfLines={numberOfLines}
+            {...props}
         >
             {children}
         </RNText>
